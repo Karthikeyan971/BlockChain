@@ -1,226 +1,163 @@
 ==============================================================================
-  IoT BLOCKCHAIN + AI SECURITY SYSTEM — DEMO SCRIPT
-  10 sample requests covering: Normal traffic + 6 attack types
+  IoT BLOCKCHAIN + AI SECURITY SYSTEM — DEMO SCRIPT (Postman)
+  10 sample requests: 4 Normal + 6 Attack types
 ==============================================================================
 
-Features order (all 10 required, in this exact sequence):
-  1.  Process_Total_IO
-  2.  Network_Intel_Received
-  3.  Process_Total_IO_Other_Operation
-  4.  Process_Total_IO_Data
-  5.  Process_Total_IO_Read
-  6.  Network_Intel_Pro_1000MT_Bytes
-  7.  Process_Pool_Paged_Bytes
-  8.  Network_Intel_Pro_1000MT_Bytes_Sent
-  9.  Network_Intel_Pro_1000MT_Packets
-  10. Process_Total_IO_Data_Operations
+HOW TO USE IN POSTMAN:
+  1. Set method to POST
+  2. URL: http://localhost:3000/iot/predict
+  3. Go to Body → raw → JSON
+  4. Paste the JSON below
+  5. Hit Send
 
-SERVERS MUST BE RUNNING BEFORE SENDING REQUESTS:
-  Terminal 1 → cd BlockChain\ai  &&  python api.py        (port 5000)
-  Terminal 2 → cd BlockChain     &&  node server.js       (port 3000)
+SERVERS MUST BE RUNNING:
+  Terminal 1 → cd BlockChain\ai  &&  python api.py     (port 5000)
+  Terminal 2 → cd BlockChain     &&  node server.js    (port 3000)
 
 ==============================================================================
-REQUEST 1 — Normal Traffic (Temperature Sensor)
-Expected: NORMAL
+REQUEST 1 — Normal | Temperature Sensor          Expected: NORMAL
 ==============================================================================
-POST http://localhost:3000/iot/predict
-Content-Type: application/json
+POST  http://localhost:3000/iot/predict
 
 {
   "deviceId": "TEMP_SENSOR_01",
   "features": [95, 72, 22, 38, 18, 720, 3276, 620, 8, 45]
 }
 
-curl:
-curl -X POST http://localhost:3000/iot/predict \
-  -H "Content-Type: application/json" \
-  -d "{\"deviceId\":\"TEMP_SENSOR_01\",\"features\":[95,72,22,38,18,720,3276,620,8,45]}"
-
-------------------------------------------------------------------------------
-REQUEST 2 — DoS / DDoS Attack (ESP32 Camera)
-Expected: ATTACK  |  High network bytes + high packet count spike
 ==============================================================================
-POST http://localhost:3000/iot/predict
-Content-Type: application/json
+REQUEST 2 — ATTACK | DoS / DDoS                  Expected: ATTACK
+           High network bytes + packet count spike
+==============================================================================
+POST  http://localhost:3000/iot/predict
 
 {
   "deviceId": "ESP32_CAM_01",
   "features": [9500, 42000, 850, 1200, 750, 98000, 82000, 76000, 8500, 620]
 }
 
-curl:
-curl -X POST http://localhost:3000/iot/predict \
-  -H "Content-Type: application/json" \
-  -d "{\"deviceId\":\"ESP32_CAM_01\",\"features\":[9500,42000,850,1200,750,98000,82000,76000,8500,620]}"
-
-------------------------------------------------------------------------------
-REQUEST 3 — Normal Traffic (Smart Power Meter)
-Expected: NORMAL
 ==============================================================================
-POST http://localhost:3000/iot/predict
-Content-Type: application/json
+REQUEST 3 — Normal | Smart Power Meter           Expected: NORMAL
+==============================================================================
+POST  http://localhost:3000/iot/predict
 
 {
   "deviceId": "SMART_METER_02",
   "features": [200, 150, 50, 80, 40, 1800, 8192, 1400, 25, 95]
 }
 
-curl:
-curl -X POST http://localhost:3000/iot/predict \
-  -H "Content-Type: application/json" \
-  -d "{\"deviceId\":\"SMART_METER_02\",\"features\":[200,150,50,80,40,1800,8192,1400,25,95]}"
-
-------------------------------------------------------------------------------
-REQUEST 4 — Ransomware Attack (Smart Camera)
-Expected: ATTACK  |  Extreme I/O read + data ops (file encryption activity)
 ==============================================================================
-POST http://localhost:3000/iot/predict
-Content-Type: application/json
+REQUEST 4 — ATTACK | Ransomware                  Expected: ATTACK
+           Extreme I/O read + data operations (file encryption)
+==============================================================================
+POST  http://localhost:3000/iot/predict
 
 {
   "deviceId": "IP_CAM_03",
   "features": [8500, 250, 3200, 4100, 6800, 1200, 45000, 980, 120, 5200]
 }
 
-curl:
-curl -X POST http://localhost:3000/iot/predict \
-  -H "Content-Type: application/json" \
-  -d "{\"deviceId\":\"IP_CAM_03\",\"features\":[8500,250,3200,4100,6800,1200,45000,980,120,5200]}"
-
-------------------------------------------------------------------------------
-REQUEST 5 — Port Scanning Attack (ESP32 Hub)
-Expected: ATTACK  |  Very high packet count, low data per packet
 ==============================================================================
-POST http://localhost:3000/iot/predict
-Content-Type: application/json
+REQUEST 5 — ATTACK | Port Scanning               Expected: ATTACK
+           Very high packet count, low data per packet
+==============================================================================
+POST  http://localhost:3000/iot/predict
 
 {
   "deviceId": "ESP32_HUB_02",
   "features": [450, 2100, 180, 95, 42, 8500, 3500, 6200, 12500, 480]
 }
 
-curl:
-curl -X POST http://localhost:3000/iot/predict \
-  -H "Content-Type: application/json" \
-  -d "{\"deviceId\":\"ESP32_HUB_02\",\"features\":[450,2100,180,95,42,8500,3500,6200,12500,480]}"
-
-------------------------------------------------------------------------------
-REQUEST 6 — Normal Traffic (Smart Light Bulb)
-Expected: NORMAL
 ==============================================================================
-POST http://localhost:3000/iot/predict
-Content-Type: application/json
+REQUEST 6 — Normal | Smart Light Bulb            Expected: NORMAL
+==============================================================================
+POST  http://localhost:3000/iot/predict
 
 {
   "deviceId": "SMART_LIGHT_03",
   "features": [85, 62, 18, 32, 14, 580, 2457, 510, 6, 38]
 }
 
-curl:
-curl -X POST http://localhost:3000/iot/predict \
-  -H "Content-Type: application/json" \
-  -d "{\"deviceId\":\"SMART_LIGHT_03\",\"features\":[85,62,18,32,14,580,2457,510,6,38]}"
-
-------------------------------------------------------------------------------
-REQUEST 7 — Backdoor Attack (Smart Plug)
-Expected: ATTACK  |  Persistent background I/O, stealthy but elevated
 ==============================================================================
-POST http://localhost:3000/iot/predict
-Content-Type: application/json
+REQUEST 7 — ATTACK | Backdoor                    Expected: ATTACK
+           Persistent elevated background I/O (stealthy C2 channel)
+==============================================================================
+POST  http://localhost:3000/iot/predict
 
 {
   "deviceId": "SMART_PLUG_04",
   "features": [1850, 425, 950, 780, 620, 2800, 12000, 1950, 420, 980]
 }
 
-curl:
-curl -X POST http://localhost:3000/iot/predict \
-  -H "Content-Type: application/json" \
-  -d "{\"deviceId\":\"SMART_PLUG_04\",\"features\":[1850,425,950,780,620,2800,12000,1950,420,980]}"
-
-------------------------------------------------------------------------------
-REQUEST 8 — MiTM Attack (Gateway Router)
-Expected: ATTACK  |  High BOTH received and sent (relay/intercept pattern)
 ==============================================================================
-POST http://localhost:3000/iot/predict
-Content-Type: application/json
+REQUEST 8 — ATTACK | Man-in-the-Middle           Expected: ATTACK
+           High bytes both received AND sent (relay/intercept pattern)
+==============================================================================
+POST  http://localhost:3000/iot/predict
 
 {
   "deviceId": "IOT_GATEWAY_01",
   "features": [2100, 5800, 750, 1200, 480, 12500, 9200, 11800, 9500, 820]
 }
 
-curl:
-curl -X POST http://localhost:3000/iot/predict \
-  -H "Content-Type: application/json" \
-  -d "{\"deviceId\":\"IOT_GATEWAY_01\",\"features\":[2100,5800,750,1200,480,12500,9200,11800,9500,820]}"
-
-------------------------------------------------------------------------------
-REQUEST 9 — Injection Attack (Sensor with DB interface)
-Expected: ATTACK  |  Spike in I/O other operations (malicious DB queries)
 ==============================================================================
-POST http://localhost:3000/iot/predict
-Content-Type: application/json
+REQUEST 9 — ATTACK | Injection                   Expected: ATTACK
+           Spike in Other I/O operations (malicious DB/command injection)
+==============================================================================
+POST  http://localhost:3000/iot/predict
 
 {
   "deviceId": "DB_SENSOR_05",
   "features": [3200, 980, 4800, 2100, 1800, 4500, 18000, 3200, 850, 3900]
 }
 
-curl:
-curl -X POST http://localhost:3000/iot/predict \
-  -H "Content-Type: application/json" \
-  -d "{\"deviceId\":\"DB_SENSOR_05\",\"features\":[3200,980,4800,2100,1800,4500,18000,3200,850,3900]}"
-
-------------------------------------------------------------------------------
-REQUEST 10 — Normal Traffic (Motion Sensor)
-Expected: NORMAL
 ==============================================================================
-POST http://localhost:3000/iot/predict
-Content-Type: application/json
+REQUEST 10 — Normal | Motion Sensor              Expected: NORMAL
+==============================================================================
+POST  http://localhost:3000/iot/predict
 
 {
   "deviceId": "MOTION_SENSOR_06",
   "features": [110, 88, 28, 52, 24, 960, 4915, 840, 11, 68]
 }
 
-curl:
-curl -X POST http://localhost:3000/iot/predict \
-  -H "Content-Type: application/json" \
-  -d "{\"deviceId\":\"MOTION_SENSOR_06\",\"features\":[110,88,28,52,24,960,4915,840,11,68]}"
-
 ==============================================================================
-  CHAIN INSPECTION REQUESTS
+  BLOCKCHAIN INSPECTION (GET requests — no body needed)
 ==============================================================================
 
-View entire blockchain (all 11 blocks after above requests):
-  GET http://localhost:3000/chain
+View full chain (11 blocks after all 10 requests):
+  GET  http://localhost:3000/chain
 
-Verify chain integrity (tamper check):
-  GET http://localhost:3000/chain/validate
-  Expected: { "valid": true, "chainLength": 11 }
+Verify chain integrity:
+  GET  http://localhost:3000/chain/validate
 
-View most recent block:
-  GET http://localhost:3000/chain/latest
+Most recent block:
+  GET  http://localhost:3000/chain/latest
 
-Health check:
-  GET http://localhost:3000/
-
-curl examples:
-  curl http://localhost:3000/chain
-  curl http://localhost:3000/chain/validate
-  curl http://localhost:3000/chain/latest
+Server health + chain stats:
+  GET  http://localhost:3000/
 
 ==============================================================================
-  WHAT TO SHOW DURING DEMO
+  DEMO WALKTHROUGH
 ==============================================================================
 
-1. Start both servers (show terminal output)
-2. Send REQUEST 1 (Normal)  → point out "NORMAL", confidence, blockIndex=1
-3. Send REQUEST 2 (DoS)     → point out "ATTACK", confidence ~0.9+, blockIndex=2
-4. Send REQUEST 4 (Ransomware) → show different attack pattern logged
-5. GET /chain               → scroll through — show every event is immutably recorded
-6. GET /chain/validate      → "valid: true" proves no tampering
-7. Manually edit chain.json → change one prediction value → GET /chain/validate
-   → "valid: false" — proves blockchain tamper detection works
-8. Restart node server.js   → GET /chain → chain is still there (persistence demo)
+Step 1 — Send Request 1 (Normal)
+         Response shows: prediction=NORMAL, blockIndex=1, chainValid=true
+
+Step 2 — Send Request 2 (DoS)
+         Response shows: prediction=ATTACK, high confidence, blockIndex=2
+
+Step 3 — Send Request 4 (Ransomware)
+         Different attack signature, new block added
+
+Step 4 — GET /chain
+         Shows all blocks recorded — every event is permanent and linked
+
+Step 5 — GET /chain/validate
+         Returns: { "valid": true } — chain is untampered
+
+Step 6 — Open chain.json, edit any prediction value, save the file
+         GET /chain/validate again → returns: { "valid": false }
+         This proves blockchain tamper detection is working
+
+Step 7 — Restart node server.js, then GET /chain
+         All blocks are still there — persistence is working
