@@ -1,0 +1,266 @@
+{
+  "info": {
+    "name": "IoT Blockchain + AI Security Demo",
+    "_postman_id": "b4e9a1c2-3d7f-4e8b-a0c5-f2d6e3b1a9d4",
+    "description": "10 IoT prediction requests (Normal + Attack types) + chain inspection endpoints.\nMake sure Flask (port 5000) and Node.js (port 3000) are running before sending.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Predictions",
+      "item": [
+        {
+          "name": "01 - Normal | Temperature Sensor",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deviceId\": \"TEMP_SENSOR_01\",\n  \"features\": [95, 72, 22, 38, 18, 720, 3276, 620, 8, 45]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/iot/predict",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["iot", "predict"]
+            },
+            "description": "Normal traffic — low I/O and network values. Expected: NORMAL"
+          }
+        },
+        {
+          "name": "02 - ATTACK | DoS/DDoS (ESP32 Camera)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deviceId\": \"ESP32_CAM_01\",\n  \"features\": [9500, 42000, 850, 1200, 750, 98000, 82000, 76000, 8500, 620]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/iot/predict",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["iot", "predict"]
+            },
+            "description": "DoS/DDoS — massive spike in network bytes received + packet count. Expected: ATTACK"
+          }
+        },
+        {
+          "name": "03 - Normal | Smart Power Meter",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deviceId\": \"SMART_METER_02\",\n  \"features\": [200, 150, 50, 80, 40, 1800, 8192, 1400, 25, 95]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/iot/predict",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["iot", "predict"]
+            },
+            "description": "Normal traffic — smart meter baseline telemetry. Expected: NORMAL"
+          }
+        },
+        {
+          "name": "04 - ATTACK | Ransomware (IP Camera)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deviceId\": \"IP_CAM_03\",\n  \"features\": [8500, 250, 3200, 4100, 6800, 1200, 45000, 980, 120, 5200]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/iot/predict",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["iot", "predict"]
+            },
+            "description": "Ransomware — extreme I/O read + data operations (file encryption activity). Expected: ATTACK"
+          }
+        },
+        {
+          "name": "05 - ATTACK | Port Scanning (ESP32 Hub)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deviceId\": \"ESP32_HUB_02\",\n  \"features\": [450, 2100, 180, 95, 42, 8500, 3500, 6200, 12500, 480]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/iot/predict",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["iot", "predict"]
+            },
+            "description": "Port scanning — very high packet count, low data per packet (ping sweep pattern). Expected: ATTACK"
+          }
+        },
+        {
+          "name": "06 - Normal | Smart Light Bulb",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deviceId\": \"SMART_LIGHT_03\",\n  \"features\": [85, 62, 18, 32, 14, 580, 2457, 510, 6, 38]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/iot/predict",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["iot", "predict"]
+            },
+            "description": "Normal traffic — minimal activity from a smart light. Expected: NORMAL"
+          }
+        },
+        {
+          "name": "07 - ATTACK | Backdoor (Smart Plug)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deviceId\": \"SMART_PLUG_04\",\n  \"features\": [1850, 425, 950, 780, 620, 2800, 12000, 1950, 420, 980]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/iot/predict",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["iot", "predict"]
+            },
+            "description": "Backdoor — persistent elevated background I/O, stealthy C2 channel pattern. Expected: ATTACK"
+          }
+        },
+        {
+          "name": "08 - ATTACK | MiTM (IoT Gateway)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deviceId\": \"IOT_GATEWAY_01\",\n  \"features\": [2100, 5800, 750, 1200, 480, 12500, 9200, 11800, 9500, 820]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/iot/predict",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["iot", "predict"]
+            },
+            "description": "Man-in-the-Middle — high bytes both received AND sent symmetrically (relay/intercept). Expected: ATTACK"
+          }
+        },
+        {
+          "name": "09 - ATTACK | Injection (DB Sensor)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deviceId\": \"DB_SENSOR_05\",\n  \"features\": [3200, 980, 4800, 2100, 1800, 4500, 18000, 3200, 850, 3900]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/iot/predict",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["iot", "predict"]
+            },
+            "description": "Injection — spike in Other I/O operations (malicious database/command injection). Expected: ATTACK"
+          }
+        },
+        {
+          "name": "10 - Normal | Motion Sensor",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deviceId\": \"MOTION_SENSOR_06\",\n  \"features\": [110, 88, 28, 52, 24, 960, 4915, 840, 11, 68]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/iot/predict",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["iot", "predict"]
+            },
+            "description": "Normal traffic — motion sensor idle telemetry. Expected: NORMAL"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Blockchain Inspection",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [""]
+            },
+            "description": "Server health + chain stats (length, valid, latestHash)"
+          }
+        },
+        {
+          "name": "View Full Blockchain",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/chain",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["chain"]
+            },
+            "description": "Returns every block in the chain — run this after all 10 predictions to see 11 blocks (genesis + 10 events)"
+          }
+        },
+        {
+          "name": "Validate Chain Integrity",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/chain/validate",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["chain", "validate"]
+            },
+            "description": "Returns valid:true if untampered. Manually edit chain.json and re-send — it returns valid:false (tamper detection demo)"
+          }
+        },
+        {
+          "name": "Latest Block",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/chain/latest",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["chain", "latest"]
+            },
+            "description": "Returns only the most recently added block"
+          }
+        }
+      ]
+    }
+  ]
+}
