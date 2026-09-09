@@ -70,29 +70,18 @@ def make_prediction():
 
 
         label = int(labels[0])
-        probability = float(probabilities[0])
+        p_attack = float(probabilities[0])
 
+        prediction = "ATTACK" if label == 1 else "NORMAL"
 
-        prediction = (
-            "ATTACK"
-            if label == 1
-            else "NORMAL"
-        )
-
+        # confidence = how certain the model is (regardless of direction)
+        confidence = max(p_attack, 1.0 - p_attack)
 
         return jsonify({
-
             "prediction": prediction,
-
-            "confidence": probability,
-
-            "deviceId": data.get(
-                "deviceId",
-                "UNKNOWN"
-            ),
-
-            "features": features
-
+            "confidence": confidence,
+            "p_attack": p_attack,
+            "deviceId": data.get("deviceId", "UNKNOWN"),
         })
 
 
